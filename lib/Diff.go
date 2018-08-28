@@ -59,20 +59,26 @@ func (diff *Diff) AppendDeleteChange(path string) error {
 }
 
 // AppendAddChange appends a line to delete
-func (diff *Diff) AppendAddChange(path, desiredValue, currentValue string) error {
+func (diff *Diff) AppendAddChange(path, desiredValue, currentValue string, encryptionKey *string) error {
 	if currentValue != "" {
 		diff.asVisual = append(diff.asVisual, color.YellowString(fmt.Sprintf("~\t%s\t%s  -->  %s", path, currentValue, desiredValue)))
 	} else {
 		diff.asVisual = append(diff.asVisual, color.GreenString(fmt.Sprintf("+\t%s\t%s", path, desiredValue)))
 	}
 
-	diff.additions = append(diff.additions, &ssm.PutParameterInput{
-		// KeyId: ""
+	add := &ssm.PutParameterInput{
 		Name:      aws.String(path),
 		Overwrite: aws.Bool(true),
 		Type:      aws.String("String"),
 		Value:     aws.String(desiredValue),
-	})
+	}
+
+	if encryptionKey != nil {
+		add.KeyId = encryptionKey
+		add.Type = aws.String("SecureString")
+	}
+
+	diff.additions = append(diff.additions, add)
 
 	return nil
 }
