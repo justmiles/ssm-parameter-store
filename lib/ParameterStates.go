@@ -110,25 +110,6 @@ func (p *ParameterStates) buildFromSSMParameters(paths []string) {
 	}
 }
 
-func (p *ParameterStates) convertFromSSMParameters(parameters []ssm.Parameter) {
-	if *p == nil {
-		*p = make(ParameterStates)
-	}
-
-	for _, parameter := range parameters {
-		path, key := pathAndKey(parameter.Name)
-		if _, ok := (*p)[path]; !ok {
-			(*p)[path] = &ParameterState{
-				Parameters: make(map[string]string),
-			}
-		}
-		(*p)[path].Parameters[key] = *parameter.Value
-		if *parameter.Type == "SecureString" {
-			(*p)[path].EncryptedKeys = append((*p)[path].EncryptedKeys, key)
-		}
-	}
-}
-
 // NewParameterStatesFromSSM reads the current parameter store in AWS returns a ParameterStates
 func NewParameterStatesFromSSM(paths []string) (p ParameterStates) {
 	p.buildFromSSMParameters(paths)
