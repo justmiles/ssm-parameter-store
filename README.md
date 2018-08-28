@@ -36,6 +36,3 @@ Push the changes from local disk to remote Parameter Store
 
     ssm-paramter-store push
 
-
-## Roadmap
-- support encrypted parameters
