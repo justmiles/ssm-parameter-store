@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	yaml "gopkg.in/yaml.v2"
 )
@@ -106,6 +107,22 @@ func (p *ParameterStates) buildFromSSMParameters(paths []string) {
 		(*p)[path].Parameters[key] = *parameter.Value
 		if *parameter.Type == "SecureString" {
 			(*p)[path].EncryptedKeys = append((*p)[path].EncryptedKeys, key)
+		}
+	}
+
+	for path, ps := range *p {
+		if len(ps.EncryptedKeys) > 0 {
+			o, err := svc.DescribeParameters(&ssm.DescribeParametersInput{
+				ParameterFilters: []*ssm.ParameterStringFilter{
+					&ssm.ParameterStringFilter{
+						Key:    aws.String("Name"),
+						Option: aws.String("Equals"),
+						Values: []*string{aws.String(path + "/" + ps.EncryptedKeys[0])},
+					},
+				},
+			})
+			Check(err)
+			(*p)[path].EncryptionKey = o.Parameters[0].KeyId
 		}
 	}
 }
