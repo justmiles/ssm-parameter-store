@@ -52,18 +52,22 @@ func (p *ParameterStates) diff(current ParameterStates) (diffs Diff, err error) 
 
 	for path, ps := range *p {
 		for key, value := range ps.Parameters {
-
+			var encryptionKey *string
+			pathAndKey := fmt.Sprintf("%s/%s", path, key)
+			if stringInSlice(key, ps.EncryptedKeys) {
+				encryptionKey = ps.EncryptionKey
+			}
 			// Add because the path does not exist in current
 			if current[path] == nil {
-				diffs.AppendAddChange(fmt.Sprintf("%s/%s", path, key), value, "")
+				diffs.AppendAddChange(pathAndKey, value, "", encryptionKey)
 
 				// Add because the key does not exist in current
 			} else if current[path].Parameters[key] == "" {
-				diffs.AppendAddChange(fmt.Sprintf("%s/%s", path, key), value, "")
+				diffs.AppendAddChange(pathAndKey, value, "", encryptionKey)
 
 				// Add because the key is not up to date in current
 			} else if value != current[path].Parameters[key] {
-				diffs.AppendAddChange(fmt.Sprintf("%s/%s", path, key), value, current[path].Parameters[key])
+				diffs.AppendAddChange(pathAndKey, value, current[path].Parameters[key], encryptionKey)
 
 			}
 		}
