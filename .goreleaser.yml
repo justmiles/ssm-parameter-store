@@ -9,7 +9,7 @@ builds:
     - darwin
     - windows
     - linux
-  binary: ecs
+  binary: ssm-parameter-store
 
 archive:
   replacements:
