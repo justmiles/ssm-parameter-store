@@ -2,6 +2,7 @@ package ssmParameterStore
 
 import (
 	"encoding/json"
+	"sort"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -14,9 +15,11 @@ type ParameterState struct {
 }
 
 func (p *ParameterState) json() ([]byte, error) {
+	sort.Strings(p.EncryptedKeys)
 	return json.MarshalIndent(p, "", "  ")
 }
 
 func (p *ParameterState) yaml() ([]byte, error) {
+	sort.Strings(p.EncryptedKeys)
 	return yaml.Marshal(p)
 }
