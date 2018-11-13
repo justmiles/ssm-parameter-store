@@ -24,7 +24,7 @@ func init() {
 var rootCmd = &cobra.Command{
 	Use:     "ssm-parameter-store",
 	Short:   "Sync SSM Parameter Store",
-	Version: "v0.0.4",
+	Version: "v0.0.6",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
