@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -65,9 +64,9 @@ func pathAndKey(p *string) (string, string) {
 // NewParameterStatesFromDisk reads the saved parameter store and returns a ParameterStates
 func NewParameterStatesFromDisk(paths []string, format, directory string) ParameterStates {
 	var p = make(ParameterStates)
+	var extension = "." + format
 
 	for _, localpath := range paths {
-
 		err := filepath.Walk(directory+localpath,
 			func(path string, info os.FileInfo, err error) error {
 				if err != nil {
@@ -76,15 +75,24 @@ func NewParameterStatesFromDisk(paths []string, format, directory string) Parame
 				if info.IsDir() {
 					return nil
 				}
-				if !strings.Contains(path, format) {
+				if filepath.Ext(path) != extension {
 					return nil
 				}
 				x := strings.Replace(path, directory, "", 1)
-				var re = regexp.MustCompile(fmt.Sprintf(`\.%s$`, format))
-				ssmPath := re.ReplaceAllString(x, "")
+				ssmPath := x[0:len(x)-len(extension)] // strip the extension
 				if ssmPath == "/" {
 					ssmPath = ""
 				}
+
+				// When the file name is the same as the name of the dir it's in,
+				// remove the file name from the SSM path to allow a nice file name
+				// for the parameters: instead of using dir/.yaml (which would be
+				// treated as a hidden file in Unix-like OS), you can use
+				// dir/dir.yaml and the path will remain the same.
+				if filepath.Base(ssmPath) == filepath.Base(filepath.Dir(ssmPath)) {
+					ssmPath = filepath.Dir(ssmPath)
+				}
+
 				data, err := ioutil.ReadFile(path)
 				if err != nil {
 					return err
