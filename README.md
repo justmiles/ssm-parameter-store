@@ -36,3 +36,8 @@ Push the changes from local disk to remote Parameter Store
 
     ssm-paramter-store push
 
+## Docker
+
+When using Docker, mount the local parameter directory into the container and pass in AWS credentials, for example
+
+    docker run -v <absolute path to a directory>:/my-parameters --rm -e AWS_DEFAULT_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY ssm-parameter-store diff -d my-parameters
