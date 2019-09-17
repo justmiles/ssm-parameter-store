@@ -21,6 +21,8 @@ A CLI to pull, diff, and push SSM Parameter Store to and from disk
 
     Use "ssm-parameter-store [command] --help" for more information about a command.
 
+## Install
+Download one of the [prebuilt binaries](https://github.com/justmiles/ssm-parameter-store/releases) add it to your system PATH.
 
 ## Examples
 
