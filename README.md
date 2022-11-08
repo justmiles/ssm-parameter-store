@@ -1,6 +1,6 @@
 # ssm-parameter-store
-A CLI to pull, diff, and push SSM Parameter Store to and from disk
 
+A CLI to pull, diff, and push SSM Parameter Store to and from disk
 
     Usage:
       ssm-parameter-store [flags]
@@ -22,7 +22,14 @@ A CLI to pull, diff, and push SSM Parameter Store to and from disk
     Use "ssm-parameter-store [command] --help" for more information about a command.
 
 ## Install
+
 Download one of the [prebuilt binaries](https://github.com/justmiles/ssm-parameter-store/releases) add it to your system PATH.
+
+**Homebrew**
+
+```bash
+brew install chrispruitt/tap/ssm-parameter-store
+```
 
 ## Examples
 
