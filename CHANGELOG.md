@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
 ## [0.0.7] - 2022-11-08
 
 ### Added
@@ -25,3 +26,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 - Updated AWS SDK for AWS SSO support
+
+## [0.0.6] - 2018-11-13
+
+_No user-facing changes were detected in the commits for this release._
+
+
+## [0.0.5] - 2018-11-13
+
+### Changed
+
+- Require confirmation before pushing changes
+
+
+## [0.0.4] - 2018-09-14
+
+### Changed
+
+- Encryption keys are now sorted for consistent ordering
+
+
+## [0.0.3] - 2018-08-30
+
+### Changed
+
+- Binary name updated
+
+
+## [0.0.2] - 2018-08-28
+
+### Added
+
+- Support for encrypted strings
+- Store encryption key to disk
+
+### Removed
+
+- convertFromSSMParameters function
+
+
+## [0.0.1] - 2018-08-27
+
+### Added
+
+- Initial release of ssm-parameter-store CLI tool
+
